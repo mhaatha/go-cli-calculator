@@ -3,8 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/mhaatha/go-cli-calculator/format"
+	"github.com/mhaatha/go-cli-calculator/operations"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -14,70 +15,37 @@ func main() {
 	var firstNumber, secondNumber, result float64
 	var operationName, yesOrNo string
 
-	fmt.Println("===============================")
-	fmt.Println("       🖩CLI Calculator🖩        ")
-	fmt.Println("===============================")
+	fmt.Print(format.App)
 
 	for {
-		fmt.Println("\nSelect an operation:")
-		fmt.Println("1. Addition (+)")
-		fmt.Println("2. Subtraction (-)")
-		fmt.Println("3. Multiplication (*)")
-		fmt.Println("4. Division (/)")
+		fmt.Print(format.Operation)
 
-		fmt.Print("\nEnter the number of the operation you want to perform: ")
-		scanner.Scan()
-		operation := scanner.Text()
+		// Function to choose operation
+		// Return string (example: "1", "2", etc.)
+		operationNumber := operations.OperationNumbers(scanner)
 
-		switch operation {
-		case "1":
-			operationName = "addition"
-		case "2":
-			operationName = "subtraction"
-		case "3":
-			operationName = "multiplication"
-		case "4":
-			operationName = "division"
-		default:
-			fmt.Println("\n===============================")
-			fmt.Println("     ⚠️ Invalid Operation⚠️     ")
-			fmt.Println("===============================")
+		// Function to fill operationName variable
+		operations.OperationCases(operationNumber, &operationName)
+		// Error handling if operationName is empty
+		if operationName == "" {
+			fmt.Print(format.Invalid)
 			time.Sleep(time.Second * 2)
 			continue
 		}
 
-		fmt.Print("\nEnter the first number: ")
-		scanner.Scan()
-		inputOne := scanner.Text()
+		// These two function below will parse the firstNumber and secondNumber variable
+		// from string into float64
+		operations.FirstNum(scanner, &firstNumber)
+		operations.SecondNum(scanner, &secondNumber)
 
-		fmt.Print("\nEnter the second number: ")
-		scanner.Scan()
-		inputTwo := scanner.Text()
-
-		if s, err := strconv.ParseFloat(inputOne, 64); err == nil {
-			firstNumber = s
-		}
-
-		if s, err := strconv.ParseFloat(inputTwo, 64); err == nil {
-			secondNumber = s
-		}
-
-		switch operationName {
-		case "addition":
-			result = firstNumber + secondNumber
-		case "subtraction":
-			result = firstNumber - secondNumber
-		case "multiplication":
-			result = firstNumber * secondNumber
-		default:
-			result = firstNumber / secondNumber
-		}
+		// Function to calculate the result
+		operations.Calculate(operationName, &result, &firstNumber, &secondNumber)
 
 		fmt.Printf("\nThe result of the %v is: %.2f \n", operationName, result)
 
-		fmt.Print("\nDo you want to perform another operation? (yes/no) ")
-		scanner.Scan()
-		yesOrNo = scanner.Text()
+		// Function to ask the user to continue or not
+		operations.IsContinue(scanner, &yesOrNo)
+
 		if strings.ToLower(yesOrNo) == "no" {
 			break
 		}
