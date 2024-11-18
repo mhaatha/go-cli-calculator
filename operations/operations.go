@@ -68,6 +68,19 @@ func Calculate(operationName string, result *float64, firstNumber, secondNumber 
 	}
 }
 
+func Result(operationName string, result float64) {
+	switch operationName {
+	case "addition":
+		fmt.Printf("\nThe result of the %v is: %.f \n", operationName, result)
+	case "subtraction":
+		fmt.Printf("\nThe result of the %v is: %.f \n", operationName, result)
+	case "multiplication":
+		fmt.Printf("\nThe result of the %v is: %.2f \n", operationName, result)
+	default:
+		fmt.Printf("\nThe result of the %v is: %.2f \n", operationName, result)
+	}
+}
+
 func IsContinue(scanner *bufio.Scanner, yesOrNo *string) {
 	fmt.Print("\nDo you want to perform another operation? (yes/no) ")
 	scanner.Scan()

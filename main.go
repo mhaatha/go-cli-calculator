@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/mhaatha/go-cli-calculator/format"
-	"github.com/mhaatha/go-cli-calculator/operations"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/mhaatha/go-cli-calculator/format"
+	"github.com/mhaatha/go-cli-calculator/operations"
 )
 
 func main() {
@@ -41,13 +42,19 @@ func main() {
 		// Function to calculate the result
 		operations.Calculate(operationName, &result, &firstNumber, &secondNumber)
 
-		fmt.Printf("\nThe result of the %v is: %.2f \n", operationName, result)
+		operations.Result(operationName, result)
 
 		// Function to ask the user to continue or not
 		operations.IsContinue(scanner, &yesOrNo)
 
 		if strings.ToLower(yesOrNo) == "no" {
 			break
+		} else if strings.ToLower(yesOrNo) == "yes" {
+			continue
+		} else {
+			fmt.Print(format.Invalid)
+			time.Sleep(time.Second * 2)
+			continue
 		}
 	}
 }
